@@ -26,10 +26,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   final _isHours = true;
-  final StopWatchTimer _stopWatchTimer = StopWatchTimer(
-
-  );
-
+  final StopWatchTimer _stopWatchTimer = StopWatchTimer();
   final _scrollController = ScrollController();
 
   Icon _icon = Icon(Icons.play_arrow,);
@@ -41,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
-  void dispose() async {
+  void dispose() async {  // 비동기 처리를 위해
     super.dispose();
     await _stopWatchTimer.dispose();
   }
@@ -58,13 +55,12 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(bottom: 0),
-              child: StreamBuilder<int>(
+              child: StreamBuilder<int>(  // setState()를 쓰지 않고 UI 업데이트
                 stream: _stopWatchTimer.rawTime,
                 initialData: _stopWatchTimer.rawTime.value,
                 builder: (context, snap) {
                   final value = snap.data;
-                  final displayTime =
-                  StopWatchTimer.getDisplayTime(value, hours: _isHours);
+                  final displayTime = StopWatchTimer.getDisplayTime(value, hours: _isHours);
                   return Column(
                     children: <Widget>[
                       Padding(
@@ -73,11 +69,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           displayTime,
                           style: const TextStyle(
                               fontSize: 40,
-                              fontFamily: 'Helvetica',
+                              fontFamily: 'BM',
                               fontWeight: FontWeight.bold),
                         ),
                       ),
-
                     ],
                   );
                 },
@@ -99,8 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (value.isEmpty) {
                     return Container();
                   }
-                  Future.delayed(const Duration(milliseconds: 100), () {
-                    _scrollController.animateTo(
+                  Future.delayed(const Duration(milliseconds: 100), () {  // Future - 비동기 작업의 결과
+                    _scrollController.animateTo(  // 스크롤 하단으로
                         _scrollController.position.maxScrollExtent,
                         duration: const Duration(milliseconds: 200),
                         curve: Curves.easeOut);
@@ -119,8 +114,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               '${index + 1}등 \t ${data.displayTime}',
                               style: const TextStyle(
                                   fontSize: 17,
-                                  fontFamily: 'Helvetica',
-                                  fontWeight: FontWeight.bold),
+                                  fontFamily: 'BM',
+                                  fontWeight: FontWeight.normal),
                             ),
                           ),
                           const Divider(
@@ -135,12 +130,11 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
 
-
-
-
             SizedBox(
               height: 30,
             ),
+
+
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Stack(
@@ -178,8 +172,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             _stopWatchTimer.onExecute.add(StopWatchExecute.start);
                           }
                         });
-
-
                       },
                     ),
                   ),
